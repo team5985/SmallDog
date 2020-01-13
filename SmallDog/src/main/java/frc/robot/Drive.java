@@ -87,10 +87,10 @@ public class Drive extends TimedRobot {
     
     double left = speed+turn;
     double right = -(speed-turn);
-    m_dl1.set(null, left);
-    m_dl2.set(null, left);
-    m_dr1.set(null, right);
-    m_dr2.set(null, right);
+    m_dl1.set(ControlMode.PercentOutput, left);
+    m_dl2.set(ControlMode.PercentOutput, left);
+    m_dr1.set(ControlMode.PercentOutput, right);
+    m_dr2.set(ControlMode.PercentOutput, right);
   }
 
   /**
