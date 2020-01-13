@@ -9,6 +9,7 @@ package frc.robot;
 
 
 
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -39,6 +41,7 @@ Joystick joy0 = new Joystick(0);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
   }
 
   /**
@@ -66,9 +69,11 @@ Joystick joy0 = new Joystick(0);
    */
   @Override
   public void autonomousInit() {
+
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+
   }
 
   /**
@@ -76,6 +81,7 @@ Joystick joy0 = new Joystick(0);
    */
   @Override
   public void autonomousPeriodic() {
+
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -106,6 +112,7 @@ Joystick joy0 = new Joystick(0);
   //Set motor
   shooter.setSpeed(shooterSpeed);
 }
+
 
 
   /**
