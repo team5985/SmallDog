@@ -7,9 +7,14 @@
 
 package frc.robot;
 
+
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,7 +28,8 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
+Joystick joy0 = new Joystick(0);
+  VictorSP shooter = new VictorSP(0);
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -86,7 +92,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+  
+  double shooterSpeed = 0;
+  if(joy0.getRawButton(1)) 
+  {
+     shooterSpeed = 1.0;
+  } 
+  else 
+  {
+    shooterSpeed = 0.0;
   }
+
+  //Set motor
+  shooter.setSpeed(shooterSpeed);
+}
+
 
   /**
    * This function is called periodically during test mode.
