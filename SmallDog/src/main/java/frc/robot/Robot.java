@@ -7,14 +7,16 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
-import com.revrobotics.CANSparkMax;
-import com.ctre.CANTalon;
+
+
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -24,14 +26,22 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public class Robot extends TimedRobot {
 
-  CANTalon m_dr1 = new CANTalon(1);
-  CANTalon m_dr2 = new CANTalon(2);
-  CANTalon m_dl1 = new CANTalon(3);
-  CANTalon m_dl2 = new CANTalon(4);
-  Joystick joy0 = new Joystick(0);
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+Joystick joy0 = new Joystick(0);
+  VictorSP shooter = new VictorSP(0);
+  /**
+   * This function is run when the robot is first started up and should be
+   * used for any initialization code.
+   */
   @Override
   public void robotInit() {
-   
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+
   }
 
   /**
@@ -59,7 +69,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
- 
+
+    m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    System.out.println("Auto selected: " + m_autoSelected);
+
   }
 
   /**
@@ -68,35 +82,38 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
+    switch (m_autoSelected) {
+      case kCustomAuto:
+        // Put custom auto code here
+        break;
+      case kDefaultAuto:
+      default:
+        // Put default auto code here
+        break;
+    }
   }
 
- @Override
- public void teleopInit(){
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-
-
- }
-
+  /**
+   * This function is called periodically during operator control.
+   */
   @Override
   public void teleopPeriodic() {
-    double vAxis = -joy0.getRawAxis(1);
-    double hAxis = joy0.getRawAxis(0);
-    double speed = vAxis*0.1;
-    double turn = hAxis*0.3;
-    if(vAxis <= 0.05 && vAxis >= -0.05){
-      speed = 0;
-    }
-    if(hAxis <= 0.05 &&  hAxis>= -0.05){
-      turn = 0;
-    }
-    
-    double left = speed+turn;
-    double right = -(speed-turn);
-    m_dl1.set(left);
-    m_dl2.set(left);
-    m_dr1.set(right);
-    m_dr2.set(right);
+  
+  double shooterSpeed = 0;
+  if(joy0.getRawButton(1)) 
+  {
+     shooterSpeed = 1.0;
+  } 
+  else 
+  {
+    shooterSpeed = 0.0;
   }
+
+  //Set motor
+  shooter.setSpeed(shooterSpeed);
+}
+
+
 
   /**
    * This function is called periodically during test mode.
