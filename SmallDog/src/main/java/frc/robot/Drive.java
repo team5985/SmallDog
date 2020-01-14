@@ -6,17 +6,10 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
-
-
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -24,28 +17,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Drive extends TimedRobot {
 
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-Joystick joy0 = new Joystick(0);
-
-  VictorSP shooter = new VictorSP(2);
-  VictorSP hopper = new VictorSP (0);
-  VictorSP intake = new VictorSP (1)
-
-  /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
-   */
+  TalonSRX m_dr1 = new TalonSRX(1);
+  TalonSRX m_dr2 = new TalonSRX(2);
+  TalonSRX m_dl1 = new TalonSRX(3);
+  TalonSRX m_dl2 = new TalonSRX(4);
+  Joystick joy0 = new Joystick(0);
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-
+   
   }
 
   /**
@@ -73,11 +54,7 @@ Joystick joy0 = new Joystick(0);
    */
   @Override
   public void autonomousInit() {
-
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
-
+ 
   }
 
   /**
@@ -86,48 +63,35 @@ Joystick joy0 = new Joystick(0);
   @Override
   public void autonomousPeriodic() {
 
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
   }
 
-  /**
-   * This function is called periodically during operator control.
-   */
+ @Override
+ public void teleopInit(){
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+
+ }
+
   @Override
   public void teleopPeriodic() {
-
-  double hopperSpeed = 0.2;
-  double intakeSpeed = 0;
-
-  
-
-  double shooterSpeed = 0;
-  double hopperSpeed = 0;
-  if(joy0.getRawButton(1)) 
-  {
-     shooterSpeed = 1.0;
-     hopperSpeed = 0.2;
-  } 
-  else 
-  {
-    shooterSpeed = 0.0;
-    hopperSpeed = 0.0;
+    double vAxis = -joy0.getRawAxis(1);
+    double hAxis = joy0.getRawAxis(0);
+    double speed = vAxis*0.1;
+    double turn = hAxis*0.3;
+    if(vAxis <= 0.05 && vAxis >= -0.05){
+      speed = 0;
+    }
+    if(hAxis <= 0.05 &&  hAxis>= -0.05){
+      turn = 0;
+    }
+    
+    double left = speed+turn;
+    double right = -(speed-turn);
+    m_dl1.set(ControlMode.PercentOutput, left);
+    m_dl2.set(ControlMode.PercentOutput, left);
+    m_dr1.set(ControlMode.PercentOutput, right);
+    m_dr2.set(ControlMode.PercentOutput, right);
   }
-
-  //Set motor
-  shooter.setSpeed(shooterSpeed);
-  hopper.setSpeed(hopperSpeed);
-  intake.setSpeed(intakeSpeed);
-}
-
-
 
   /**
    * This function is called periodically during test mode.
