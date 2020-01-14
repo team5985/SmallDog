@@ -35,7 +35,7 @@ Joystick joy0 = new Joystick(0);
 
   VictorSP shooter = new VictorSP(2);
   VictorSP hopper = new VictorSP (0);
-  VictorSP intake = new VictorSP (1)
+  VictorSP intake = new VictorSP (1);
 
 
   /**
@@ -119,10 +119,10 @@ Joystick joy0 = new Joystick(0);
     hopperSpeed = 0.0;
   }
     
-  if(joy0.getRawButton(2) {
+  if(joy0.getRawButton(2)) {
     intakeSpeed = 1.0;
   } else {
-    intakerSpeed = 0.0;
+    intakeSpeed = 0.0;
   }
 
   //Set motor
