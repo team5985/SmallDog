@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
 Joystick joy0 = new Joystick(0);
   VictorSP shooter = new VictorSP(2);
   VictorSP hopper = new VictorSP (0);
+  VictorSP intake = new VictorSP (1)
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -95,6 +96,7 @@ Joystick joy0 = new Joystick(0);
   public void teleopPeriodic() {
 
   double hopperSpeed = 0.2;
+  double intakeSpeed = 0;
 
   
 
@@ -110,7 +112,8 @@ Joystick joy0 = new Joystick(0);
 
   //Set motor
   shooter.setSpeed(shooterSpeed);
-    hopper.setSpeed(0.2);
+  hopper.setSpeed(hopperSpeed);
+  intake.setSpeed(intakeSpeed);
 }
 
 
