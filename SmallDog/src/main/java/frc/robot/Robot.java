@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 Joystick joy0 = new Joystick(0);
   VictorSP shooter = new VictorSP(0);
+  VictorSP shooter = new VictorSP(1);
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -100,13 +101,16 @@ Joystick joy0 = new Joystick(0);
   public void teleopPeriodic() {
   
   double shooterSpeed = 0;
+  double hopperSpeed = 0;
   if(joy0.getRawButton(1)) 
   {
      shooterSpeed = 1.0;
+     hopperSpeed = 0.2;
   } 
   else 
   {
     shooterSpeed = 0.0;
+    hopperSpeed = 0.0;
   }
 
   //Set motor
