@@ -32,9 +32,11 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 Joystick joy0 = new Joystick(0);
 
+
   VictorSP shooter = new VictorSP(2);
   VictorSP hopper = new VictorSP (0);
   VictorSP intake = new VictorSP (1)
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -105,11 +107,7 @@ Joystick joy0 = new Joystick(0);
 
   double hopperSpeed = 0.2;
   double intakeSpeed = 0;
-
-  
-
-  double shooterSpeed = 0;
-  double hopperSpeed = 0;
+   double shooterSpeed = 0;
   if(joy0.getRawButton(1)) 
   {
      shooterSpeed = 1.0;
@@ -119,6 +117,12 @@ Joystick joy0 = new Joystick(0);
   {
     shooterSpeed = 0.0;
     hopperSpeed = 0.0;
+  }
+    
+  if(joy0.getRawButton(2) {
+    intakeSpeed = 1.0;
+  } else {
+    intakerSpeed = 0.0;
   }
 
   //Set motor
