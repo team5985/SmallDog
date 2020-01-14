@@ -31,8 +31,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 Joystick joy0 = new Joystick(0);
-  VictorSP shooter = new VictorSP(0);
-  VictorSP shooter = new VictorSP(1);
+  VictorSP shooter = new VictorSP(3);
+  VictorSP hopper = new VictorSP(0);
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
