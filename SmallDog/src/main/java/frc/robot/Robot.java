@@ -7,14 +7,16 @@
 
 package frc.robot;
 
-
-
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+
 
 
 /**
@@ -31,6 +33,11 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 Joystick joy0 = new Joystick(0);
+
+TalonSRX m_dr1 = new TalonSRX(1);
+TalonSRX m_dr2 = new TalonSRX(2);
+TalonSRX m_dl1 = new TalonSRX(3);
+TalonSRX m_dl2 = new TalonSRX(4);
 
 
   VictorSP shooter = new VictorSP(2);
@@ -104,8 +111,27 @@ Joystick joy0 = new Joystick(0);
    */
   @Override
   public void teleopPeriodic() {
+    //get joystick position
+    double vAxis = -joy0.getRawAxis(1);
+    double hAxis = joy0.getRawAxis(0);
+    double speed = vAxis*0.1;
+    double turn = hAxis*0.3;
+    if(vAxis <= 0.05 && vAxis >= -0.05){
+      speed = 0;
+    }
+    if(hAxis <= 0.05 &&  hAxis>= -0.05){
+      turn = 0;
+    }
+    //calcualte speed/turn
+    double left = speed+turn;
+    double right = (speed-turn);
+    m_dl1.set(ControlMode.PercentOutput, left);
+    m_dl2.set(ControlMode.PercentOutput, left);
+    m_dr1.set(ControlMode.PercentOutput, right);
+    m_dr2.set(ControlMode.PercentOutput, right);
 
-  double hopperSpeed = 0.2;
+    //init mechanism speeds
+  double hopperSpeed = 0;
   double intakeSpeed = 0;
    double shooterSpeed = 0;
   if(joy0.getRawButton(1)) 
@@ -125,7 +151,7 @@ Joystick joy0 = new Joystick(0);
     intakeSpeed = 0.0;
   }
 
-  //Set motor
+  //Set motors
   shooter.setSpeed(shooterSpeed);
   hopper.setSpeed(hopperSpeed);
   intake.setSpeed(intakeSpeed);
