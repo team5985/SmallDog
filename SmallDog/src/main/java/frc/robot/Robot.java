@@ -19,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
 
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -114,8 +115,9 @@ TalonSRX m_dl2 = new TalonSRX(4);
     //get joystick position
     double vAxis = -joy0.getRawAxis(1);
     double hAxis = joy0.getRawAxis(0);
-    double speed = vAxis*0.1;
-    double turn = hAxis*0.3;
+    double throttle = ((-joy0.getThrottle() + 1) / 2 * -1);
+    double speed = vAxis * throttle;
+    double turn = hAxis * throttle * -3;
     if(vAxis <= 0.05 && vAxis >= -0.05){
       speed = 0;
     }
@@ -123,8 +125,8 @@ TalonSRX m_dl2 = new TalonSRX(4);
       turn = 0;
     }
     //calcualte speed/turn
-    double left = speed+turn;
-    double right = (speed-turn);
+    double left = (speed+turn);
+    double right = -((speed-turn));
     m_dl1.set(ControlMode.PercentOutput, left);
     m_dl2.set(ControlMode.PercentOutput, left);
     m_dr1.set(ControlMode.PercentOutput, right);
@@ -146,10 +148,15 @@ TalonSRX m_dl2 = new TalonSRX(4);
   }
     
   if(joy0.getRawButton(2)) {
-    intakeSpeed = 1.0;
-  } else {
+    intakeSpeed = -0.75;
+  } else if(joy0.getRawButton(3)) {
+    intakeSpeed = 0.75;
+  }else {
     intakeSpeed = 0.0;
   }
+
+  
+
 
   //Set motors
   shooter.setSpeed(shooterSpeed);
@@ -166,3 +173,5 @@ TalonSRX m_dl2 = new TalonSRX(4);
   public void testPeriodic() {
   }
 }
+
+
