@@ -116,8 +116,8 @@ TalonSRX m_dl2 = new TalonSRX(4);
     double vAxis = -joy0.getRawAxis(1);
     double hAxis = joy0.getRawAxis(0);
     double throttle = ((-joy0.getThrottle() + 1) / 2 * -1);
-    double speed = vAxis * throttle;
-    double turn = hAxis * throttle * -3;
+    double speed = vAxis * -0.35;
+    double turn = hAxis * -0.2 * -3;
     if(vAxis <= 0.05 && vAxis >= -0.05){
       speed = 0;
     }
@@ -138,13 +138,13 @@ TalonSRX m_dl2 = new TalonSRX(4);
    double shooterSpeed = 0;
   if(joy0.getRawButton(1)) 
   {
-     shooterSpeed = 1.0;
-     hopperSpeed = 0.2;
+     shooterSpeed = 0.75;
+     //hopperSpeed = -1.0;
   } 
   else 
   {
     shooterSpeed = 0.0;
-    hopperSpeed = 0.0;
+    //hopperSpeed = 0.0;
   }
     
   if(joy0.getRawButton(2)) {
@@ -153,6 +153,14 @@ TalonSRX m_dl2 = new TalonSRX(4);
     intakeSpeed = 0.75;
   }else {
     intakeSpeed = 0.0;
+  }
+
+  if(joy0.getRawButton(4)) {
+    hopperSpeed = -0.7;
+  } else if (joy0.getRawButton(5)) {
+    hopperSpeed = 0.5;
+  } else {
+    hopperSpeed = 0;
   }
 
   
