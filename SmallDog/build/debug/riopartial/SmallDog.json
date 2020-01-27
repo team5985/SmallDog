@@ -1,0 +1,9 @@
+[
+  {
+    "artifact": "frcJava (in project SmallDog)",
+    "target": "roborio",
+    "debugfile": "frcJava_roborio.debugconfig",
+    "project": "SmallDog",
+    "language": "java"
+  }
+]
