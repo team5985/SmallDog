@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+
 
 
 
@@ -116,8 +117,8 @@ TalonSRX m_dl2 = new TalonSRX(4);
     double vAxis = -joy0.getRawAxis(1);
     double hAxis = joy0.getRawAxis(0);
     double throttle = ((-joy0.getThrottle() + 1) / 2 * -1);
-    double speed = vAxis * -0.35;
-    double turn = hAxis * -0.2 * -3;
+    double speed = vAxis * Config.kDriveMultiplier * Config.kSafeMultiplier * throttle;
+    double turn = hAxis * Config.kDriveMultiplier * Config.kSafeMultiplier * throttle;
     if(vAxis <= 0.05 && vAxis >= -0.05){
       speed = 0;
     }
@@ -127,10 +128,10 @@ TalonSRX m_dl2 = new TalonSRX(4);
     //calcualte speed/turn
     double left = (speed+turn);
     double right = -((speed-turn));
-    m_dl1.set(ControlMode.PercentOutput, left);
-    m_dl2.set(ControlMode.PercentOutput, left);
-    m_dr1.set(ControlMode.PercentOutput, right);
-    m_dr2.set(ControlMode.PercentOutput, right);
+    m_dl1.set(ControlMode.PercentOutput, (left * -1));
+    m_dl2.set(ControlMode.PercentOutput, (left * -1));
+    m_dr1.set(ControlMode.PercentOutput, (right * -1));
+    m_dr2.set(ControlMode.PercentOutput, (right * -1));
 
     //init mechanism speeds
   double hopperSpeed = 0;
@@ -156,9 +157,9 @@ TalonSRX m_dl2 = new TalonSRX(4);
   }
 
   if(joy0.getRawButton(4)) {
-    hopperSpeed = -0.7;
+    hopperSpeed = -1;
   } else if (joy0.getRawButton(5)) {
-    hopperSpeed = 0.5;
+    hopperSpeed = 1;
   } else {
     hopperSpeed = 0;
   }
