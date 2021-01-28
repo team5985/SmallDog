@@ -9,17 +9,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-
-
-
-
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,17 +29,16 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-Joystick joy0 = new Joystick(0);
+  Joystick joy0 = new Joystick(0);
 
-TalonSRX m_dr1 = new TalonSRX(1);
-TalonSRX m_dr2 = new TalonSRX(2);
-TalonSRX m_dl1 = new TalonSRX(3);
-TalonSRX m_dl2 = new TalonSRX(4);
+  Victor m_dr1 = new Victor(0);
+  Victor m_dr2 = new Victor(1);
+  Victor m_dl1 = new Victor(2);
+  Victor m_dl2 = new Victor(3);
 
-
-  VictorSP shooter = new VictorSP(2);
-  VictorSP hopper = new VictorSP (0);
-  VictorSP intake = new VictorSP (1);
+  Victor shooter = new Victor(6);
+  Victor hopper = new Victor(5);
+  Victor intake = new Victor(4);
 
 
   /**
@@ -128,10 +122,10 @@ TalonSRX m_dl2 = new TalonSRX(4);
     //calcualte speed/turn
     double left = (speed+turn);
     double right = -((speed-turn));
-    m_dl1.set(ControlMode.PercentOutput, (left * -1));
-    m_dl2.set(ControlMode.PercentOutput, (left * -1));
-    m_dr1.set(ControlMode.PercentOutput, (right * -1));
-    m_dr2.set(ControlMode.PercentOutput, (right * -1));
+    m_dl1.set((left * -1));
+    m_dl2.set((left * -1));
+    m_dr1.set((right * -1));
+    m_dr2.set((right * -1));
 
     //init mechanism speeds
   double hopperSpeed = 0;

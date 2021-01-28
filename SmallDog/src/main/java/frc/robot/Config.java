@@ -15,6 +15,6 @@ public class Config {
     public static final int kSteerMultiplier = -3;
     public static final boolean kDemoMode = false;
      //Enable for slower demo speed - enabled = 0.35
-    public static double kSafeMultiplier = -0.35;  
+    public static double kSafeMultiplier = 0.8;  
     
 }
