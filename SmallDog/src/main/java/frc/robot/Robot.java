@@ -7,15 +7,16 @@
 
 package frc.robot;
 
-
-
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,12 +31,16 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-Joystick joy0 = new Joystick(0);
+  Joystick joy0 = new Joystick(0);
 
+  Victor m_dr1 = new Victor(0);
+  Victor m_dr2 = new Victor(1);
+  Victor m_dl1 = new Victor(2);
+  Victor m_dl2 = new Victor(3);
 
-  VictorSP shooter = new VictorSP(2);
-  VictorSP hopper = new VictorSP (0);
-  VictorSP intake = new VictorSP (1);
+  CANSparkMax shooter = new CANSparkMax(2, MotorType.kBrushless);
+  Victor hopper = new Victor(4);
+  Victor intake = new Victor(5);
 
 
   /**
@@ -104,14 +109,34 @@ Joystick joy0 = new Joystick(0);
    */
   @Override
   public void teleopPeriodic() {
+    //get joystick position
+    double hAxis = -joy0.getX();
+    double vAxis = joy0.getY();
+    double throttle = ((-joy0.getThrottle() + 1) / 2 * -1);
+    double speed = vAxis * Config.kDriveMultiplier * Config.kSafeMultiplier * throttle;
+    double turn = hAxis * Config.kDriveMultiplier * Config.kSafeMultiplier * throttle;
+    if(vAxis <= 0.05 && vAxis >= -0.05){
+      speed = 0;
+    }
+    if(hAxis <= 0.05 &&  hAxis>= -0.05){
+      turn = 0;
+    }
+    //calcualte speed/turn
+    double left = (speed+turn);
+    double right = -((speed-turn));
+    m_dl1.set((left * -1));
+    m_dl2.set((left * -1));
+    m_dr1.set((right * -1));
+    m_dr2.set((right * -1));
 
-  double hopperSpeed = 0.2;
+    //init mechanism speeds
+  double hopperSpeed = 0;
   double intakeSpeed = 0;
    double shooterSpeed = 0;
   if(joy0.getRawButton(1)) 
   {
-     shooterSpeed = 1.0;
-     hopperSpeed = 0.2;
+     shooterSpeed = 1;
+     hopperSpeed = -1.0;
   } 
   else 
   {
@@ -120,13 +145,26 @@ Joystick joy0 = new Joystick(0);
   }
     
   if(joy0.getRawButton(2)) {
-    intakeSpeed = 1.0;
-  } else {
+    intakeSpeed = -0.75;
+  } else if(joy0.getRawButton(3)) {
+    intakeSpeed = 0.75;
+  }else {
     intakeSpeed = 0.0;
   }
 
-  //Set motor
-  shooter.setSpeed(shooterSpeed);
+  if(joy0.getRawButton(4)) {
+    hopperSpeed = -1;
+  } else if (joy0.getRawButton(5)) {
+    hopperSpeed = 1;
+  } else {
+    hopperSpeed = 0;
+  }
+
+  
+
+
+  //Set motors
+  shooter.set(shooterSpeed);
   hopper.setSpeed(hopperSpeed);
   intake.setSpeed(intakeSpeed);
 }
@@ -140,3 +178,5 @@ Joystick joy0 = new Joystick(0);
   public void testPeriodic() {
   }
 }
+
+
