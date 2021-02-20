@@ -13,8 +13,8 @@ package frc.robot;
 public class Config {
     public static final int kDriveMultiplier = 1;
     public static final int kSteerMultiplier = -3;
-    public static final boolean kDemoMode = false;
+    public static final boolean kDemoMode = true;
      //Enable for slower demo speed - enabled = 0.35
-    public static double kSafeMultiplier = 0.8;  
-    
+    public static double kSafeMultiplier = 0.35;  
+
 }

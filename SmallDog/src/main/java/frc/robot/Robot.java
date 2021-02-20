@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,9 +38,9 @@ public class Robot extends TimedRobot {
   Victor m_dl1 = new Victor(2);
   Victor m_dl2 = new Victor(3);
 
-  Victor shooter = new Victor(6);
-  Victor hopper = new Victor(5);
-  Victor intake = new Victor(4);
+  CANSparkMax shooter = new CANSparkMax(2, MotorType.kBrushless);
+  Victor hopper = new Victor(4);
+  Victor intake = new Victor(5);
 
 
   /**
@@ -108,8 +110,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //get joystick position
-    double vAxis = -joy0.getRawAxis(1);
-    double hAxis = joy0.getRawAxis(0);
+    double hAxis = -joy0.getX();
+    double vAxis = joy0.getY();
     double throttle = ((-joy0.getThrottle() + 1) / 2 * -1);
     double speed = vAxis * Config.kDriveMultiplier * Config.kSafeMultiplier * throttle;
     double turn = hAxis * Config.kDriveMultiplier * Config.kSafeMultiplier * throttle;
@@ -133,13 +135,13 @@ public class Robot extends TimedRobot {
    double shooterSpeed = 0;
   if(joy0.getRawButton(1)) 
   {
-     shooterSpeed = 0.75;
-     //hopperSpeed = -1.0;
+     shooterSpeed = 1;
+     hopperSpeed = -1.0;
   } 
   else 
   {
     shooterSpeed = 0.0;
-    //hopperSpeed = 0.0;
+    hopperSpeed = 0.0;
   }
     
   if(joy0.getRawButton(2)) {
@@ -162,7 +164,7 @@ public class Robot extends TimedRobot {
 
 
   //Set motors
-  shooter.setSpeed(shooterSpeed);
+  shooter.set(shooterSpeed);
   hopper.setSpeed(hopperSpeed);
   intake.setSpeed(intakeSpeed);
 }
